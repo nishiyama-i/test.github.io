@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チェックインシステム</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; background: #f0f2f5; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
+        h1 { color: #333; font-size: 1.5rem; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 8px; font-size: 1.2rem; cursor: pointer; color: white; transition: 0.3s; }
+        .btn-in { background: #28a745; }
+        .btn-in:hover { background: #218838; }
+        .btn-out { background: #dc3545; }
+        .btn-out:hover { background: #c82333; }
+        #status { margin-top: 20px; font-weight: bold; color: #555; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; font-size: 0.9rem; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background: #eee; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>入退室記録</h1>
+    <p id="current-time"></p>
+    
+    <button class="btn btn-in" onclick="record('チェックイン')">チェックイン</button>
+    <button class="btn btn-out" onclick="record('チェックアウト')">チェックアウト</button>
+
+    <div id="status"></div>
+
+    <h3>本日の履歴</h3>
+    <table id="history-table">
+        <thead>
+            <tr>
+                <th>種別</th>
+                <th>時刻</th>
+            </tr>
+        </thead>
+        <tbody id="history-body"></tbody>
+    </table>
+</div>
+
+<script>
+    // 現在時刻の更新
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('current-time').innerText = now.toLocaleString();
+    }, 1000);
+
+    // 記録処理
+    function record(type) {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString();
+        const dateStr = now.toLocaleDateString();
+
+        // 画面への表示
+        const tableBody = document.getElementById('history-body');
+        const row = tableBody.insertRow(0);
+        row.insertCell(0).innerText = type;
+        row.insertCell(1).innerText = timeStr;
+
+        document.getElementById('status').innerText = `${type}を完了しました (${timeStr})`;
+        
+        // 実際にはここでAPI（Google Sheets等）にデータを送る処理を書く
+        console.log(`記録: ${type}, 日付: ${dateStr}, 時間: ${timeStr}`);
+    }
+</script>
+
+</body>
+</html>
